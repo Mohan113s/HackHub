@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "235564253996",
+    "firebase_url": "https://hackhub-e5521-default-rtdb.firebaseio.com",
+    "project_id": "hackhub-e5521",
+    "storage_bucket": "hackhub-e5521.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235564253996:android:f0cd5ec6a874a0434f2289",
+        "android_client_info": {
+          "package_name": "com.example.hackhub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuslemqxXPbaSH4ejM0d07kxWE3O2FiAs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
