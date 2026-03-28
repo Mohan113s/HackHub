@@ -32,12 +32,56 @@ class _FavoriteEventsState extends State<FavoriteEvents> with SingleTickerProvid
       CurvedAnimation(parent: _animController, curve: Curves.easeIn),
     );
     _animController.forward();
+
+    // ✅ FIX: Clean up expired favorites when page loads
+    _cleanupExpiredFavorites();
   }
 
   @override
   void dispose() {
     _animController.dispose();
     super.dispose();
+  }
+
+  /// ✅ NEW: Checks every saved favorite against the hackathons node.
+  /// If the event no longer exists (expired/deleted), it is removed
+  /// from the user's favorites automatically.
+  Future<void> _cleanupExpiredFavorites() async {
+    if (userId == "guest") return;
+
+    try {
+      // Fetch all current favorites for this user
+      final favSnapshot = await FirebaseDatabase.instance
+          .ref()
+          .child('favorites')
+          .child(userId)
+          .get();
+
+      if (!favSnapshot.exists || favSnapshot.value == null) return;
+
+      final favData = Map<String, dynamic>.from(favSnapshot.value as Map);
+
+      for (final eventKey in favData.keys) {
+        // Check if the event still exists in the hackathons node
+        final hackathonSnapshot = await FirebaseDatabase.instance
+            .ref()
+            .child('hackathons')
+            .child(eventKey)
+            .get();
+
+        if (!hackathonSnapshot.exists) {
+          // Event has expired or been deleted — remove from favorites silently
+          await FirebaseDatabase.instance
+              .ref()
+              .child('favorites')
+              .child(userId)
+              .child(eventKey)
+              .remove();
+        }
+      }
+    } catch (_) {
+      // Silent fail — cleanup is best-effort, don't disrupt the UI
+    }
   }
 
   Future<void> _removeFavorite(String eventKey) async {
@@ -79,8 +123,10 @@ class _FavoriteEventsState extends State<FavoriteEvents> with SingleTickerProvid
           ),
         );
       } else {
+        // ✅ FIX: If event doesn't exist when tapped, remove it and notify user
+        await _removeFavorite(favorite['key']?.toString() ?? '');
         if (mounted) {
-          _showSnackBar("⚠️ Event details not available", isError: true);
+          _showSnackBar("⚠️ This event has expired and was removed", isError: true);
         }
       }
     } catch (e) {

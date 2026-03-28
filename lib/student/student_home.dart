@@ -218,152 +218,157 @@ class _StudentHomeState extends State<StudentHome> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            primaryBlue.withOpacity(0.05),
-            lightBlue.withOpacity(0.05),
-            Colors.white,
-          ],
+    // ✅ FIX: Wrapped root Container with SafeArea so the content
+    // starts below the system status bar (time, battery, notifications).
+    // No logic or styling changes were made anywhere else.
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              primaryBlue.withOpacity(0.05),
+              lightBlue.withOpacity(0.05),
+              Colors.white,
+            ],
+          ),
         ),
-      ),
-      child: StreamBuilder<DatabaseEvent>(
-        stream: ref.onValue,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(accentBlue),
-                    strokeWidth: 3,
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    "Loading events...",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey.shade600,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          if (snapshot.hasError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [Colors.red.shade300, Colors.red.shade400],
-                      ),
-                    ),
-                    child: const Icon(
-                      Icons.error_outline,
-                      size: 50,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    "Something went wrong",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: primaryBlue,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          final data = snapshot.data?.snapshot.value;
-
-          if (data == null) {
-            return FadeTransition(
-              opacity: _fadeAnimation,
-              child: Center(
+        child: StreamBuilder<DatabaseEvent>(
+          stream: ref.onValue,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                          colors: [accentBlue.withOpacity(0.2), lightBlue.withOpacity(0.2)],
-                        ),
-                      ),
-                      child: Icon(
-                        Icons.event_busy,
-                        size: 60,
-                        color: accentBlue,
-                      ),
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(accentBlue),
+                      strokeWidth: 3,
                     ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      "No Events Available",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                        color: primaryBlue,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 20),
                     Text(
-                      "Check back later for new hackathons!",
+                      "Loading events...",
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 16,
                         color: Colors.grey.shade600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
                 ),
+              );
+            }
+
+            if (snapshot.hasError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                          colors: [Colors.red.shade300, Colors.red.shade400],
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.error_outline,
+                        size: 50,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Something went wrong",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: primaryBlue,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            final data = snapshot.data?.snapshot.value;
+
+            if (data == null) {
+              return FadeTransition(
+                opacity: _fadeAnimation,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            colors: [accentBlue.withOpacity(0.2), lightBlue.withOpacity(0.2)],
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.event_busy,
+                          size: 60,
+                          color: accentBlue,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        "No Events Available",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                          color: primaryBlue,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "Check back later for new hackathons!",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            final Map<String, dynamic> map = Map<String, dynamic>.from(data as Map);
+
+            final events = map.entries
+                .map((e) => {
+                      'key': e.key,
+                      ...Map<String, dynamic>.from(e.value),
+                    })
+                .toList();
+
+            events.sort((a, b) {
+              final dateA = a['createdAt'] ?? '';
+              final dateB = b['createdAt'] ?? '';
+              return dateB.compareTo(dateA);
+            });
+
+            return FadeTransition(
+              opacity: _fadeAnimation,
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                itemCount: events.length,
+                itemBuilder: (context, index) {
+                  final event = events[index];
+                  return _buildEventCard(event);
+                },
               ),
             );
-          }
-
-          final Map<String, dynamic> map = Map<String, dynamic>.from(data as Map);
-
-          final events = map.entries
-              .map((e) => {
-                    'key': e.key,
-                    ...Map<String, dynamic>.from(e.value),
-                  })
-              .toList();
-
-          events.sort((a, b) {
-            final dateA = a['createdAt'] ?? '';
-            final dateB = b['createdAt'] ?? '';
-            return dateB.compareTo(dateA);
-          });
-
-          return FadeTransition(
-            opacity: _fadeAnimation,
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              itemCount: events.length,
-              itemBuilder: (context, index) {
-                final event = events[index];
-                return _buildEventCard(event);
-              },
-            ),
-          );
-        },
+          },
+        ),
       ),
     );
   }
