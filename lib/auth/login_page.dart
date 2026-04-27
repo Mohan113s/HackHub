@@ -8,7 +8,8 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
+class _LoginPageState extends State<LoginPage>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final email = TextEditingController();
   final password = TextEditingController();
@@ -64,17 +65,16 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       );
 
       debugPrint("✅ Login successful: ${userCredential.user?.email}");
-      
+
       if (mounted) {
         Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
       }
-
     } catch (e) {
       setState(() => loading = false);
 
       if (mounted) {
         String errorMessage = "Login failed";
-        
+
         if (e.toString().contains('user-not-found')) {
           errorMessage = "No user found with this email";
         } else if (e.toString().contains('wrong-password')) {
@@ -102,7 +102,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             ),
             backgroundColor: Colors.red.shade600,
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             margin: const EdgeInsets.all(16),
             duration: const Duration(seconds: 4),
           ),
@@ -114,7 +115,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    
+
     return Scaffold(
       body: Container(
         height: size.height,
@@ -278,6 +279,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                               },
                             ),
                             const SizedBox(height: 40),
+                            const SizedBox(height: 20),
 
                             // Login Button with Gradient
                             Container(
@@ -317,7 +319,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                         ),
                                       )
                                     : const Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             "Login",
@@ -329,12 +332,58 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                             ),
                                           ),
                                           SizedBox(width: 10),
-                                          Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 22),
+                                          Icon(Icons.arrow_forward_rounded,
+                                              color: Colors.white, size: 22),
                                         ],
                                       ),
                               ),
                             ),
                             const SizedBox(height: 30),
+                            //forgot password link
+                            const SizedBox(height: 20),
+                            Center(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, '/forgot-password');
+                                },
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: const [
+                                        Icon(Icons.lock_reset_rounded,
+                                            size: 18, color: accentBlue),
+                                        SizedBox(width: 6),
+                                        Text(
+                                          "Forgot Password?",
+                                          style: TextStyle(
+                                            color: accentBlue,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Container(
+                                      height: 2,
+                                      width: 120,
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            accentBlue.withOpacity(0.2),
+                                            accentBlue,
+                                            accentBlue.withOpacity(0.2),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
 
                             // Signup Link with Card Style
                             Container(
@@ -361,7 +410,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                                     onTap: loading
                                         ? null
                                         : () {
-                                            Navigator.pushNamed(context, '/signup-option');
+                                            Navigator.pushNamed(
+                                                context, '/signup-option');
                                           },
                                     child: const Text(
                                       "Sign Up",
@@ -442,7 +492,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [accentBlue.withOpacity(0.15), lightBlue.withOpacity(0.15)],
+                    colors: [
+                      accentBlue.withOpacity(0.15),
+                      lightBlue.withOpacity(0.15)
+                    ],
                   ),
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -470,7 +523,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
               ),
               filled: true,
               fillColor: Colors.white,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
             ),
           ),
         ),
@@ -525,19 +579,26 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [accentBlue.withOpacity(0.15), lightBlue.withOpacity(0.15)],
+                    colors: [
+                      accentBlue.withOpacity(0.15),
+                      lightBlue.withOpacity(0.15)
+                    ],
                   ),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(Icons.lock_rounded, color: accentBlue, size: 20),
+                child:
+                    const Icon(Icons.lock_rounded, color: accentBlue, size: 20),
               ),
               suffixIcon: IconButton(
                 icon: Icon(
-                  _obscurePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                  _obscurePassword
+                      ? Icons.visibility_off_rounded
+                      : Icons.visibility_rounded,
                   color: Colors.grey.shade500,
                   size: 22,
                 ),
-                onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                onPressed: () =>
+                    setState(() => _obscurePassword = !_obscurePassword),
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
@@ -561,7 +622,8 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
               ),
               filled: true,
               fillColor: Colors.white,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
             ),
           ),
         ),

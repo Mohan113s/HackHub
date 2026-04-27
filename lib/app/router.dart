@@ -6,6 +6,7 @@ import '../auth/login_page.dart';
 import '../auth/signup_option_page.dart';
 import '../auth/student_signup.dart';
 import '../auth/college_signup.dart';
+import '../auth/forgot_password_page.dart'; // ✅ ADD THIS
 
 // STUDENT
 import '../student/student_profile_setup.dart';
@@ -46,6 +47,12 @@ class AppRouter {
       case '/college-signup':
         return MaterialPageRoute(
           builder: (_) => const CollegeSignup(),
+        );
+
+      // ✅ ADD THIS BLOCK
+      case '/forgot-password':
+        return MaterialPageRoute(
+          builder: (_) => const ForgotPasswordPage(),
         );
 
       // ================= STUDENT =================

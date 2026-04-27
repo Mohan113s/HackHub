@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'app/router.dart';
-import 'splash/splash_gif_screen.dart';   // ✅ Only one import
+import 'splash/splash_gif_screen.dart';
+
+// ✅ ADD THIS (optional but good for direct usage)
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,12 +24,10 @@ void main() async {
       ),
     );
   } else {
-    // 📱 Mobile Firebase init
     await Firebase.initializeApp();
 
-    // 🖼️ Image cache optimization
     PaintingBinding.instance.imageCache.maximumSize = 100;
-    PaintingBinding.instance.imageCache.maximumSizeBytes = 50 << 20; // 50MB
+    PaintingBinding.instance.imageCache.maximumSizeBytes = 50 << 20;
   }
 
   runApp(const HackHub());
@@ -45,7 +45,9 @@ class HackHub extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home: const SplashGifScreen(),   // ✅ GIF screen first
+      home: const SplashGifScreen(),
+
+      // ✅ ROUTING handled here
       onGenerateRoute: AppRouter.generateRoute,
     );
   }
